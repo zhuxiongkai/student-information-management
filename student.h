@@ -20,6 +20,6 @@ void modify();               // 修改学生信息
 void search();               // 查询学生信息
 void display();              // 显示学生信息
 void freeMemory();           // 释放学生信息内存
-void sortStudentsByNumber(); // 按学号排序学生信息
+void sortStudentsByNumber(Student *head);
 
 #endif // STUDENT_H

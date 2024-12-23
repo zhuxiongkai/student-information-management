@@ -239,7 +239,7 @@ void search() {
         if (result) {
             printf("\n-- \033[32m[查询成功]\033[0m --\n");
             printf("----------------\n");
-            printf("学号: %d\n", result->studentNumber);
+            printf("学号: %s\n", result->studentNumber);
             printf("姓名: %s\n", result->name);
             printf("性别: %c\n", result->gender);
             printf("年龄: %d\n", result->age);
