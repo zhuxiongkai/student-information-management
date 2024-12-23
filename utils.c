@@ -12,46 +12,47 @@ void clearScreen() {
     #endif
 }
 
-// 按学号排序学生信息
-void sortStudentsByNumber() {
-    if (head == NULL || head->next == NULL) {
-        return;
-    }
+void sortStudentsByNumber(Student *head) {
+    if (head == NULL) return;  // 空链表直接返回
 
-    Student* i = head;
-    Student* j = NULL;
-    int tempNumber;
-    char tempName[50];
-    char tempGender;
+    Student *i, *j;
+    char tempNumber[10];  // 存储学号的临时变量
+    char tempName[50];    // 存储姓名的临时变量
+    char tempSpecialty[50]; // 存储专业的临时变量
     int tempAge;
-    char tempSpecialty[50];
+    char tempGender;
 
-    while (i != NULL) {
-        j = i->next;
-        while (j != NULL) {
-            if (i->studentNumber > j->studentNumber) {
-                tempNumber = i->studentNumber;
-                i->studentNumber = j->studentNumber;
-                j->studentNumber = tempNumber;
+    // 遍历链表进行排序
+    for (i = head; i != NULL; i = i->next) {
+        for (j = i->next; j != NULL; j = j->next) {
+            // 按学号比较
+            if (strcmp(i->studentNumber, j->studentNumber) > 0) {
+                // 交换学生学号
+                strcpy(tempNumber, i->studentNumber);
+                strcpy(i->studentNumber, j->studentNumber);
+                strcpy(j->studentNumber, tempNumber);
 
+                // 交换学生姓名
                 strcpy(tempName, i->name);
                 strcpy(i->name, j->name);
                 strcpy(j->name, tempName);
 
+                // 交换学生专业
+                strcpy(tempSpecialty, i->specialty);
+                strcpy(i->specialty, j->specialty);
+                strcpy(j->specialty, tempSpecialty);
+
+                // 交换学生性别
                 tempGender = i->gender;
                 i->gender = j->gender;
                 j->gender = tempGender;
 
+                // 交换学生年龄
                 tempAge = i->age;
                 i->age = j->age;
                 j->age = tempAge;
-
-                strcpy(tempSpecialty, i->specialty);
-                strcpy(i->specialty, j->specialty);
-                strcpy(j->specialty, tempSpecialty);
             }
-            j = j->next;
         }
-        i = i->next;
     }
 }
+

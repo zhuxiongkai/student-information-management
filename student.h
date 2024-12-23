@@ -1,14 +1,13 @@
 #ifndef STUDENT_H
 #define STUDENT_H
 
-// 学生结构体
 typedef struct Student {
-    int studentNumber;        // 学号
-    char name[50];            // 姓名
-    char gender;              // 性别
-    int age;                  // 年龄
-    char specialty[50];       // 专业
-    struct Student* next;     // 链表指针
+  char studentNumber[10];
+  char name[50];
+  char gender;
+  int age;
+  char specialty[50];
+  struct Student *next;
 } Student;
 
 // 全局变量 head
