@@ -3,12 +3,42 @@
 #include "student.h"
 #include "utils.h"
 #include <stdio.h>
+#include <unistd.h>  // 用于 sleep 函数
+
+// 显示进度条
+void showProgressBar() {
+  const int total = 50; // 总进度条的字符数
+  int progress = 0;
+
+  printf("\n\033[32m[加载中]\033[0m 请稍候...\n");
+
+  // 模拟加载进度
+  for (progress = 0; progress <= total; progress++) {
+    int i;
+    // 打印进度条，绿色部分
+    printf("\r\033[32m[");  // 设置进度条开始部分为绿色
+    for (i = 0; i < total; i++) {
+      if (i < progress) {
+        printf("=");  // 已完成部分显示为 "="
+      } else {
+        printf(" ");  // 未完成部分显示为空格
+      }
+    }
+    printf("]\033[32m %d%%\033[0m", (progress * 100) / total);  // 进度百分比和进度条结束部分为绿色
+    fflush(stdout);  // 强制刷新输出
+    usleep(50000);  // 每次更新之间暂停50ms，使进度条看起来更平滑
+  }
+
+  printf("\n\n");  // 完成后换行
+}
+
 
 int main() {
   int choice;
 
   displayLogo();
-
+  showProgressBar(); // 添加进度条效果
+  clearScreen();
   // 程序启动时加载数据
   loadFromFile();
 

@@ -1,25 +1,28 @@
 #ifndef STUDENT_H
 #define STUDENT_H
 
+// 学生结构体定义
 typedef struct Student {
-  char studentNumber[10];
-  char name[50];
-  char gender;
-  int age;
-  char specialty[50];
-  struct Student *next;
+    char studentNumber[20]; // 学号
+    char name[50];          // 姓名
+    char gender;            // 性别
+    int age;                // 年龄
+    char specialty[50];     // 专业
+    struct Student* next;   // 链表指针
 } Student;
 
-// 全局变量 head
-extern Student* head;  // 声明 head 变量，确保其他文件可以访问
+// 函数声明
+void addStudent();
+void deleteStudent();
+void modify();
+void search();
+void display();
+void saveToFile();
+void loadFromFile();
+void freeMemory();
+void sortStudentsByNumber(Student *head); // 在展示前对学生信息按学号排序
+Student* findStudent(int searchType, void *key);
 
-// 学生管理操作的函数声明
-void addStudent();           // 增加学生信息
-void deleteStudent();        // 删除学生信息
-void modify();               // 修改学生信息
-void search();               // 查询学生信息
-void display();              // 显示学生信息
-void freeMemory();           // 释放学生信息内存
-void sortStudentsByNumber(Student *head);
+extern Student* head;
 
 #endif // STUDENT_H
