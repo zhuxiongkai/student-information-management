@@ -21,7 +21,7 @@ void saveToFile();
 void loadFromFile();
 void freeMemory();
 void sortStudentsByNumber(Student *head); // 在展示前对学生信息按学号排序
-Student* findStudent(int searchType, void *key);
+Student* findStudent( void *key);
 
 extern Student* head;
 
