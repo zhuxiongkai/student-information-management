@@ -2,6 +2,7 @@
 #include <stdio.h>
 // 显示logo
 void displayLogo() {
+  clearScreen();
   printf("\033[1;32m"); // 设置字体为绿色
   printf("\n");
   printf("                          --- 学生信息管理系统 ---    \n");

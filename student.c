@@ -6,6 +6,7 @@
 
 Student *head = NULL; // 全局链表头指针
 
+// 根据学号查找学生信息
 Student *findStudent(void *key) {
   Student *current = head;
   char *studentNumber = (char *)key;
@@ -19,71 +20,47 @@ Student *findStudent(void *key) {
   return NULL; // 没有找到匹配的学生
 }
 
-// 根据专业查找多个学生
-Student *findStudentsBySpecialty(const char *specialty) {
-  Student *current = head;
-  Student *resultHead = NULL; // 用于存储匹配的学生
-  Student *resultTail = NULL; // 用于指向新链表的最后一个元素
+// 根据 choice 参数按姓名或专业查找多个学生
+Student *findStudents(int choice, const char *value) {
+    Student *current = head;
+    Student *resultHead = NULL; // 用于存储匹配的学生
+    Student *resultTail = NULL; // 用于指向新链表的最后一个元素
 
-  while (current != NULL) {
-    Student *nextStudent = current->next; // 保存下一个节点，以便后续操作
+    while (current != NULL) {
+        Student *nextStudent = current->next; // 保存下一个节点，以便后续操作
 
-    if (strcmp(current->specialty, specialty) == 0) {
-      // 创建新节点，并将当前学生添加到结果链表
-      Student *newStudent = (Student *)malloc(sizeof(Student));
-      if (newStudent == NULL) {
-        printf("\033[31m[错误]\033[0m 内存分配失败！\n");
-        return NULL;
-      }
-      *newStudent = *current; // 复制当前学生的信息
+        // 根据 choice 判断匹配条件
+        int match = 0;
+        if (choice == 2) {
+            match = (strcmp(current->name, value) == 0);
+        } else if (choice == 3) {
+            match = (strcmp(current->specialty, value) == 0);
+        }
 
-      if (resultHead == NULL) {
-        resultHead = resultTail = newStudent; // 初始化结果链表
-      } else {
-        resultTail->next = newStudent; // 将新学生加入到结果链表
-        resultTail = newStudent;
-      }
-      resultTail->next = NULL; // 确保新链表的最后节点的 next 为 NULL
+        if (match) {
+            // 创建新节点，并将当前学生添加到结果链表
+            Student *newStudent = (Student *)malloc(sizeof(Student));
+            if (newStudent == NULL) {
+                printf("\033[31m[错误]\033[0m 内存分配失败！\n");
+                return NULL;
+            }
+            *newStudent = *current; // 复制当前学生的信息
+
+            if (resultHead == NULL) {
+                resultHead = resultTail = newStudent; // 初始化结果链表
+            } else {
+                resultTail->next = newStudent; // 将新学生加入到结果链表
+                resultTail = newStudent;
+            }
+            resultTail->next = NULL; // 确保新链表的最后节点的 next 为 NULL
+        }
+
+        current = nextStudent; // 移动到下一个学生
     }
 
-    current = nextStudent; // 移动到下一个学生
-  }
-
-  return resultHead; // 返回匹配的学生链表
+    return resultHead; // 返回匹配的学生链表
 }
 
-// 根据姓名查找多个学生
-Student *findStudentsByName(const char *name) {
-  Student *current = head;
-  Student *resultHead = NULL; // 用于存储匹配的学生
-  Student *resultTail = NULL; // 用于指向新链表的最后一个元素
-
-  while (current != NULL) {
-    Student *nextStudent = current->next; // 保存下一个节点，以便后续操作
-
-    if (strcmp(current->name, name) == 0) {
-      // 创建新节点，并将当前学生添加到结果链表
-      Student *newStudent = (Student *)malloc(sizeof(Student));
-      if (newStudent == NULL) {
-        printf("\033[31m[错误]\033[0m 内存分配失败！\n");
-        return NULL;
-      }
-      *newStudent = *current; // 复制当前学生的信息
-
-      if (resultHead == NULL) {
-        resultHead = resultTail = newStudent; // 初始化结果链表
-      } else {
-        resultTail->next = newStudent; // 将新学生加入到结果链表
-        resultTail = newStudent;
-      }
-      resultTail->next = NULL; // 确保新链表的最后节点的 next 为 NULL
-    }
-
-    current = nextStudent; // 移动到下一个学生
-  }
-
-  return resultHead; // 返回匹配的学生链表
-}
 
 // 增加学生信息
 void addStudent() {
@@ -174,7 +151,7 @@ void addStudent() {
     newStudent->specialty[strcspn(newStudent->specialty, "\n")] =
         '\0'; // 去除换行符
 
-    if (strlen(newStudent->specialty) > 16) {
+    if (strlen(newStudent->specialty) > 23) {
       printf("\033[33m[提示]\033[0m 专业名称不能超过8个字，请重新输入。\n");
       continue;
     }
@@ -334,7 +311,7 @@ getchar();
       current->specialty[strcspn(current->specialty, "\n")] =
           '\0'; // 去除换行符
 
-      if (strlen(current->specialty) > 16) {
+      if (strlen(current->specialty) > 23) {
         printf("\033[33m[提示]\033[0m 专业名称不能超过8个字，请重新输入。\n");
         continue;
       }
@@ -415,13 +392,13 @@ void search() {
       fgets(strKey, sizeof(strKey), stdin);
       strKey[strcspn(strKey, "\n")] = '\0';
       key = strKey;
-      results = findStudentsByName(key); // 使用新的函数查找姓名
+      results = findStudents(2,key);
     } else if (choice == 3) {
       printf("\033[34m[输入]\033[0m 请输入专业: ");
       fgets(strKey, sizeof(strKey), stdin);
       strKey[strcspn(strKey, "\n")] = '\0';
       key = strKey;
-      results = findStudentsBySpecialty(key); // 使用新的函数查找专业
+      results = findStudents(3,key);
     } else {
       printf("\033[33m[提示]\033[0m 无效选择，请重新选择。\n");
       continue;
@@ -448,38 +425,32 @@ void search() {
   }
 }
 
+// 显示学生信息
 void display() {
   if (head == NULL) {
     printf("\033[33m[提示]\033[0m 没有学生信息。\n");
     return;
   }
-  sortStudentsByNumber(head); // 使用正确的排序函数
+  sortStudentsByNumber(head);
   Student *current = head;
 
   // 打印表头
-  printf("\n--------------------------- \033[32m[学生信息]\033[0m "
-         "--------------------------\n");
-  printf("%-17s %-18s %-10s %-9s %-15s\n", "学号", "姓名", "性别", "年龄",
-         "专业");
-  printf("-----------------------------------------------------------------\n");
+printf("\n--------------------------- \033[32m[学生信息]\033[0m --------------------------\n");
+printf("%-17s %-18s %-10s %-9s %-15s\n", "学号", "姓名", "性别", "年龄", "专业");
+printf("-----------------------------------------------------------------\n");
 
-  // 打印学生信息
-  while (current != NULL) {
-    printf("%-15s %-20s %-8c %-6d %-15s\n", current->studentNumber,
-           current->name, current->gender, current->age, current->specialty);
+// 打印学生信息
+while (current != NULL) {
+
+    printf("%-15s %-20s %-8c %-6d %-15s\n", 
+           current->studentNumber,
+           current->name, 
+           current->gender, 
+           current->age, 
+           current->specialty);
+
     current = current->next;
-  }
-  printf("-----------------------------------------------------------------\n");
 }
+printf("-----------------------------------------------------------------\n");
 
-// 释放内存
-void freeMemory() {
-  Student *current = head;
-  while (current != NULL) {
-    Student *temp = current;
-    current = current->next;
-    free(temp);
-  }
-  head = NULL;
-  // printf("\033[32m[成功]\033[0m 内存释放完成。\n");
 }
