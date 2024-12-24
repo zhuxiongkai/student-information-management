@@ -3,10 +3,7 @@
 #include "student.h"
 #include "utils.h"
 #include <stdio.h>
-#include <unistd.h>  // 用于 sleep 函数
-
-
-
+#include <unistd.h> // 用于 sleep 函数
 
 int main() {
   int choice;
@@ -38,10 +35,7 @@ int main() {
     case 5:
       display();
       break;
-    case 6:
-      saveToFile();
-      break;
-    case 7: {
+    case 6: {
       // 退出前提示
       char confirm;
       printf("\033[33m[提示]\033[0m 你确定要退出吗？(Y/N): ");

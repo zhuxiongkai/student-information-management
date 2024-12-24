@@ -104,9 +104,20 @@ void addStudent() {
     break;
   }
 
-  printf("\033[34m[输入]\033[0m 请输入学生姓名: ");
+  while(1){
+    printf("\033[34m[输入]\033[0m 请输入学生姓名: ");
   fgets(newStudent->name, sizeof(newStudent->name), stdin);
   newStudent->name[strcspn(newStudent->name, "\n")] = '\0';
+
+  // 检查姓名长度是否在1到6个汉字之间
+  if (strlen(newStudent->name) > 18) {
+    printf("\033[33m[提示]\033[0m 姓名长度必须在1到6个汉字之间，请重新输入。\n");
+    continue;
+  }else{
+    break;
+  }
+  }
+
 
   while (1) {
     printf("\033[34m[输入]\033[0m 请输入学生性别 (M/F): ");
@@ -228,6 +239,7 @@ void deleteStudent() {
     free(current);
     saveToFile();
     printf("\033[32m[成功]\033[0m 学生信息删除成功！\n");
+    display();
     break;
   }
 }
